@@ -1,7 +1,6 @@
 const { response, request } = require('express');
-const bcrypt = require('bcryptjs');
 const User = require('../models/user.model');
-const { validationResult } = require('express-validator');
+const { encryptField } = require('../helpers/encrypt-field')
 
 const usersGet = (req, res = response) => {
     res.json({
@@ -9,19 +8,19 @@ const usersGet = (req, res = response) => {
     })
 }
 
-const usersPut = (req = request, res = response) => {
+const usersPut = async (req = request, res = response) => {
     
-    const params = req.params;
-    const queryParams = req.query;
+    const { id } = req.params;
+    const { password, google, email, _id, __v, ...rest } = req.body;
+    // if( password )  rest.password = encryptField(password);
+    console.log(req.body);
+
+    // Me devuelve la version antes de ser actualizada
+    const user = await User.findByIdAndUpdate( id, rest );
 
     res.json({
         msg: 'put api | Controller',
-        params: {
-            ...params
-        },
-        queryParams: {
-            ...queryParams
-        }
+        user
     })
 }
 
@@ -32,9 +31,7 @@ const usersPost = async (req = request, res = response) => {
     const { name, email, password, role } = req.body;
     const user = new User({name, email, password, role});
 
-    // Encrypting password
-    const salt = bcrypt.genSaltSync();
-    user.password = bcrypt.hashSync(password, salt);
+    user.password = encryptField(password);
 
     // Save in Database
     await user.save();
