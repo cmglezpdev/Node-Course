@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 require('dotenv').config();
 
 class Server {
@@ -6,6 +7,7 @@ class Server {
     constructor() {
         this.app = express();
         this.port = process.env.PORT;
+        this.usersPath = '/api/users';
 
         // Middelwares
         this.middelwares();
@@ -15,13 +17,12 @@ class Server {
     }
 
     middelwares() {
+        this.app.use(cors());
         this.app.use( express.static('public') );
     }
 
     routes() {
-        this.app.get('/api', (req, res) => {
-            res.sendFile(__dirname + 'public/index.html');
-        }); 
+        this.app.use(this.usersPath, require('../routes/users.routes'));
     }
 
     listen() {
