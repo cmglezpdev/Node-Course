@@ -7,9 +7,19 @@ const usersGet = (req, res = response) => {
     })
 }
 
-const usersPut = (req, res = response) => {
+const usersPut = (req = request, res = response) => {
+    
+    const params = req.params;
+    const queryParams = req.query;
+
     res.json({
-        msg: 'put api | Controller'
+        msg: 'put api | Controller',
+        params: {
+            ...params
+        },
+        queryParams: {
+            ...queryParams
+        }
     })
 }
 
