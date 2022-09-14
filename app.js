@@ -1,10 +1,6 @@
-const express = require('express');
-
-const app = express();
-
-app.get('/', (req, res) => {
-    res.send('Hello World');
-})
+const Server = require("./models/server");
 
 
-app.listen(8080);
+const server = new Server();
+
+server.listen();
