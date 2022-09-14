@@ -50,9 +50,19 @@ const usersPost = async (req = request, res = response) => {
     })
 }
 
-const usersDelete = (req, res = response) => {
+const usersDelete = async (req = request, res = response) => {
+    
+    const { id } = req.params;
+
+    // Delete of database
+    // const user = await User.findByIdAndDelete( id );
+
+    // Change state of user (simulate a delete)
+    const user = await User.findByIdAndUpdate(id, {state: false});
+
     res.json({
-        msg: 'delete api | Controller'
+        msg: 'delete api | Controller',
+        user
     })
 }
 

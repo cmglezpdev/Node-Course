@@ -21,9 +21,13 @@ router.post('/', [
     check('email', 'The email is not valid').isEmail(),
     check('email').custom(validEmail),
     check('role').custom(validRole),
-    validFields,
+    validFields
 ],usersPost); 
 
-router.delete('/', usersDelete);
+router.delete('/:id', [
+    check('id', 'The id is not valid').isMongoId(),
+    check('id').custom(validExistUserById),
+    validFields
+], usersDelete);
 
 module.exports = router;
