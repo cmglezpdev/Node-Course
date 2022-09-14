@@ -1,4 +1,4 @@
-const { response } = require('express');
+const { response, request } = require('express');
 
 
 const usersGet = (req, res = response) => {
@@ -13,9 +13,13 @@ const usersPut = (req, res = response) => {
     })
 }
 
-const usersPost = (req, res = response) => {
+const usersPost = (req = request, res = response) => {
+    
+    const body = req.body;
+    
     res.status(201).json({
-        msg: 'post api | Controller'
+        msg: 'post api | Controller',
+        ...body,
     })
 }
 

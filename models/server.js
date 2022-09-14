@@ -18,6 +18,10 @@ class Server {
 
     middelwares() {
         this.app.use(cors());
+
+        // Parser and reading of body
+        this.app.use( express.json() );
+
         this.app.use( express.static('public') );
     }
 
