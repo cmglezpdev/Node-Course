@@ -2,9 +2,20 @@ const { response, request } = require('express');
 const User = require('../models/user.model');
 const { encryptField } = require('../helpers/encrypt-field')
 
-const usersGet = (req, res = response) => {
+const usersGet = async (req = request, res = response) => {
+
+    const { from = 0, limit = 5 } = req.query;
+    const query = { state: true };
+
+    const [users, count] = await Promise.all([
+        User.find(query).skip(from).limit(limit),
+        User.countDocuments(query)
+    ])
+
     res.json({
-        msg: 'get api | Controller'
+        msg: 'get api | Controller',
+        totalUsers: count,
+        users
     })
 }
 
@@ -24,13 +35,10 @@ const usersPut = async (req = request, res = response) => {
     })
 }
 
-
-
 const usersPost = async (req = request, res = response) => {
     
     const { name, email, password, role } = req.body;
     const user = new User({name, email, password, role});
-
     user.password = encryptField(password);
 
     // Save in Database
